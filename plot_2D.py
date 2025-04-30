@@ -28,6 +28,16 @@ def plot_2d_contour(surf_file, surf_name='train_loss', vmin=0.1, vmax=10, vlevel
         print ('%s is not found in %s' % (surf_name, surf_file))
 
     print('------------------------------------------------------------------')
+    print('Sanity Check')
+    print('------------------------------------------------------------------')
+    print("X shape:", X.shape)
+    print("Y shape:", Y.shape)
+    print("Z shape:", Z.shape)
+    print("X min/max:", np.min(X), np.max(X))
+    print("Y min/max:", np.min(Y), np.max(Y))
+    print("Z min/max:", np.min(Z), np.max(Z))
+
+    print('------------------------------------------------------------------')
     print('plot_2d_contour')
     print('------------------------------------------------------------------')
     print("loading surface file: " + surf_file)
@@ -71,6 +81,37 @@ def plot_2d_contour(surf_file, surf_name='train_loss', vmin=0.1, vmax=10, vlevel
     ax = Axes3D(fig)
     surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
     fig.colorbar(surf, shrink=0.5, aspect=5)
+    fig.savefig(surf_file + '_' + surf_name + '_3dsurface.pdf', dpi=300,
+                bbox_inches='tight', format='pdf')
+
+
+    #fig = plt.figure()
+    #ax = Axes3D(fig)
+    #X, Y = np.meshgrid(np.linspace(0, 1, 10), np.linspace(0, 1, 10))
+    #Z = np.zeros_like(X)
+    #surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm)
+    #fig.colorbar(surf, shrink=0.5, aspect=5)
+    #fig.savefig('cifar10/trained_nets/TEST_PLOT_FAKE_DATA.pdf', dpi=300,
+    #            bbox_inches='tight', format='pdf')
+
+    # Dummy data
+    #X, Y = np.meshgrid(np.linspace(0, 1, 10), np.linspace(0, 1, 10))
+    #Z = np.zeros_like(X)  # Flat surface
+    # Set up figure and 3D axes properly
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')  # <-- KEY difference
+    # Aspect ratio (optional but recommended)
+    #ax.set_box_aspect([1, 1, 0.5])
+    # Plot
+    surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, edgecolor='none', antialiased=True)
+    # Colorbar
+    fig.colorbar(surf, shrink=0.5, aspect=10)
+    # Nice view
+    ax.view_init(elev=30, azim=135)
+    # Labels
+    #ax.set_xlabel('X')
+    #ax.set_ylabel('Y')
+    #ax.set_zlabel('Z')
     fig.savefig(surf_file + '_' + surf_name + '_3dsurface.pdf', dpi=300,
                 bbox_inches='tight', format='pdf')
 

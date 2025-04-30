@@ -1,0 +1,2 @@
+cifar10/trained_nets/seed=3-epoch=193-val_loss=0.1898-model=ResNet18-optimizer=SGD-rho=0.05-adaptive=False-model_name=ResNet18_CIFAR10_seed3_SGD.pth_weights_xignore=biasbn_xnorm=filter_yignore=biasbn_ynorm=filter.h5_[-1.0,1.0,51]x[-1.0,1.0,51].h5
+cifar10/trained_nets/seed=2-epoch=191-val_loss=0.1278-model=ResNet18-optimizer=SGD-rho=0.05-adaptive=False-model_name=ResNet18_CIFAR10_seed2_SGD.pth_weights_xignore=biasbn_xnorm=filter_yignore=biasbn_ynorm=filter.h5_[-1.0,1.0,51]x[-1.0,1.0,51].h5

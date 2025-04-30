@@ -9,6 +9,7 @@ models = {
     'vgg9'                  : vgg.VGG9,
     'densenet121'           : densenet.DenseNet121,
     'resnet18'              : resnet.ResNet18,
+    'resnet18_torch'        : resnet.ResNet18_torch,
     'resnet18_noshort'      : resnet.ResNet18_noshort,
     'resnet34'              : resnet.ResNet34,
     'resnet34_noshort'      : resnet.ResNet34_noshort,

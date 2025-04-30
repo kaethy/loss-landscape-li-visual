@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -190,6 +191,18 @@ def ResNet18():
 
 def ResNet18_noshort():
     return ResNet(BasicBlock_noshortcut, [2,2,2,2])
+
+def ResNet18_torch(num_classes=10):
+    print("Creating base model")
+    model = torchvision.models.resnet18(weights=None)
+    print("Adjusting first conv layer")
+    model.conv1 = nn.Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    model.maxpool = nn.Identity()
+    print("Setting output layer")
+    model.fc = nn.Linear(in_features=512, out_features=num_classes, bias=True)
+    print("Model ready")
+    return model
+
 
 def ResNet34():
     return ResNet(BasicBlock, [3,4,6,3])

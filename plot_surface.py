@@ -59,11 +59,12 @@ def setup_surface_file(args, surf_file, dir_file):
     f['dir_file'] = dir_file
 
     # Create the coordinates(resolutions) at which the function is evaluated
-    xcoordinates = np.linspace(args.xmin, args.xmax, num=args.xnum)
+    print(args.xmin, args.xmax, args.xnum, int(args.xnum))
+    xcoordinates = np.linspace(args.xmin, args.xmax, num=int(args.xnum))
     f['xcoordinates'] = xcoordinates
 
     if args.y:
-        ycoordinates = np.linspace(args.ymin, args.ymax, num=args.ynum)
+        ycoordinates = np.linspace(args.ymin, args.ymax, num=int(args.ynum))
         f['ycoordinates'] = ycoordinates
     f.close()
 
@@ -210,6 +211,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Environment setup
     #--------------------------------------------------------------------------
+    print("Environment setup")
     if args.mpi:
         comm = mpi.setup_MPI()
         rank, nproc = comm.Get_rank(), comm.Get_size()
@@ -228,6 +230,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Check plotting resolution
     #--------------------------------------------------------------------------
+    print("Check plotting resolution")
     try:
         args.xmin, args.xmax, args.xnum = [float(a) for a in args.x.split(':')]
         args.ymin, args.ymax, args.ynum = (None, None, None)
@@ -241,6 +244,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Load models and extract parameters
     #--------------------------------------------------------------------------
+    print("Load models and extract parameters")
     net = model_loader.load(args.dataset, args.model, args.model_file)
     w = net_plotter.get_weights(net) # initial parameters
     s = copy.deepcopy(net.state_dict()) # deepcopy since state_dict are references
@@ -251,6 +255,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Setup the direction file and the surface file
     #--------------------------------------------------------------------------
+    print("Setup the direction file and the surface file")
     dir_file = net_plotter.name_direction_file(args) # name the direction file
     if rank == 0:
         net_plotter.setup_direction(args, dir_file, net)
@@ -272,6 +277,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Setup dataloader
     #--------------------------------------------------------------------------
+    print("Setup dataloader")
     # download CIFAR10 if it does not exit
     if rank == 0 and args.dataset == 'cifar10':
         torchvision.datasets.CIFAR10(root=args.dataset + '/data', train=True, download=True)
@@ -286,12 +292,14 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------
     # Start the computation
     #--------------------------------------------------------------------------
+    print("Start the computation")
     crunch(surf_file, net, w, s, d, trainloader, 'train_loss', 'train_acc', comm, rank, args)
     # crunch(surf_file, net, w, s, d, testloader, 'test_loss', 'test_acc', comm, rank, args)
 
     #--------------------------------------------------------------------------
     # Plot figures
     #--------------------------------------------------------------------------
+    print("Plot figures")
     if args.plot and rank == 0:
         if args.y and args.proj_file:
             plot_2D.plot_contour_trajectory(surf_file, dir_file, args.proj_file, 'train_loss', args.show)
