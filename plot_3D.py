@@ -152,7 +152,7 @@ def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=
         cf_list.append(cf)
         if args.labels is not None and idx <= len(args.labels):
             x_pos = 0.29 + idx * (0.98 / num_files)
-            fig2d.text(x=x_pos, y=-0.05, s=args.labels[idx], ha='center', fontsize=14, fontweight='bold')
+            fig2d.text(x=x_pos, y=-0.02, s=args.labels[idx], ha='center', fontsize=14)#, fontweight='bold')
         idx += 1
 
     ## After plotting your subplots
@@ -163,7 +163,7 @@ def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=
 
     fig2d.tight_layout()
     contourf_pdf = str(surf_files)[:-4] + '_multiple_contours.pdf'
-    fig2d.savefig(contourf_pdf, dpi=300, bbox_inches='tight', format='pdf')
+    fig2d.savefig(contourf_pdf, dpi=500, bbox_inches='tight', format='pdf')
     print(f"Saved 2D contour plots to {contourf_pdf}")
 
     # ------------------------
@@ -218,17 +218,17 @@ def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=
         ax.set_zlabel('Z')
         ax.view_init(elev=30, azim=135)
         if args.labels is not None and i < len(args.labels):
-            ax.set_title(args.labels[i], fontsize=14, fontweight='bold', pad=3)
+            ax.set_title(args.labels[i], fontsize=12, pad=1, fontweight='bold')
         surf_list.append(surf)
 
     # Manually adjust spacing between subplots
     fig3d.subplots_adjust(wspace=0.25)  # Increase the wspace to reduce overlap
 
     # Shared colorbar to the right of all subplots
-    fig3d.colorbar(surf_list[0], ax=axes3d, location='right', shrink=0.4, pad=0.1)
+    fig3d.colorbar(surf_list[0], ax=axes3d, location='right', shrink=0.5, pad=0.1)
 
     surface_pdf = str(surf_files)[:-4] + '_multiple_3d_surfaces.pdf'
-    fig3d.savefig(surface_pdf, dpi=300, bbox_inches='tight', format='pdf')
+    fig3d.savefig(surface_pdf, dpi=500, bbox_inches='tight', format='pdf')
 
 
     if show:
