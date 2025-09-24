@@ -108,7 +108,7 @@ def plot_3d_contour(surf_file, surf_name='train_loss', vmin=0.1, vmax=10, vlevel
     f.close()
     if show: plt.show()
 
-def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=0.5, show=False):
+def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=0.5, show=False, save_dir=""):
     """Plot multiple 2D contours and 3D surfaces next to each other with one colorbar each."""
     # Read file paths
     with open("./"+surf_files, 'r') as f:
@@ -144,15 +144,16 @@ def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=
     cf_list = []
     idx = 0
     print(len(args.labels))
-    for ax, (surf_file, X, Y, Z) in zip(axes2d, data_list):
+    for i, (ax, (surf_file, X, Y, Z)) in enumerate(zip(axes2d, data_list)):
         cf = ax.contour(X, Y, Z, cmap='summer', levels=np.arange(vmin, vmax, vlevel))
         #ax.set_title(surf_file.split('/')[-1], fontsize=10)
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         cf_list.append(cf)
         if args.labels is not None and idx <= len(args.labels):
-            x_pos = 0.29 + idx * (0.98 / num_files)
-            fig2d.text(x=x_pos, y=-0.02, s=args.labels[idx], ha='center', fontsize=14)#, fontweight='bold')
+            #x_pos = 0.29 + idx * (0.98 / num_files)
+            #fig2d.text(x=x_pos, y=-0.02, s=args.labels[idx], ha='center', fontsize=14, fontweight='bold')
+            ax.set_title(args.labels[i], fontsize=22, pad=10, fontweight='bold')
         idx += 1
 
     ## After plotting your subplots
@@ -218,7 +219,7 @@ def plot_multiple(surf_files, surf_name='train_loss', vmin=0.1, vmax=10, vlevel=
         ax.set_zlabel('Z')
         ax.view_init(elev=30, azim=135)
         if args.labels is not None and i < len(args.labels):
-            ax.set_title(args.labels[i], fontsize=12, pad=1, fontweight='bold')
+            ax.set_title(args.labels[i], fontsize=16, pad=1, fontweight='bold')
         surf_list.append(surf)
 
     # Manually adjust spacing between subplots
@@ -247,7 +248,8 @@ if __name__ == '__main__':
     parser.add_argument('--zlim', default=10, type=float, help='Maximum loss value to show')
     parser.add_argument('--show', action='store_true', default=False, help='show plots')
     parser.add_argument('--labels', nargs='*', default=None, help='List of labels (one per plot) to write below each subplot')
+    parser.add_argument('--save_dir', default="", help='where the plots are saved')
 
     args = parser.parse_args()
 
-    plot_multiple(args.surf_files, args.surf_name, args.vmin, args.vmax, args.vlevel, args.show)
+    plot_multiple(args.surf_files, args.surf_name, args.vmin, args.vmax, args.vlevel, args.show, args.save_dir)

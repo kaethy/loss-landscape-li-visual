@@ -106,6 +106,7 @@ def crunch(surf_file, net, w, s, d, dataloader, loss_key, acc_key, comm, rank, a
     if args.loss_name == 'mse':
         criterion = nn.MSELoss()
 
+    print("Starting the loop now!")
     # Loop over all uncalculated loss values
     for count, ind in enumerate(inds):
         # Get the coordinates of the loss value being calculated
@@ -119,9 +120,11 @@ def crunch(surf_file, net, w, s, d, dataloader, loss_key, acc_key, comm, rank, a
 
         # Record the time to compute the loss value
         loss_start = time.time()
+        print("start compute")
         loss, acc = evaluation.eval_loss(net, criterion, dataloader, args.cuda)
         loss_compute_time = time.time() - loss_start
-
+        print(loss_compute_time)
+        
         # Record the result in the local array
         losses.ravel()[ind] = loss
         accuracies.ravel()[ind] = acc
@@ -163,7 +166,7 @@ if __name__ == '__main__':
     parser.add_argument('--cuda', '-c', action='store_true', help='use cuda')
     parser.add_argument('--threads', default=2, type=int, help='number of threads')
     parser.add_argument('--ngpu', type=int, default=1, help='number of GPUs to use for each rank, useful for data parallel evaluation')
-    parser.add_argument('--batch_size', default=128, type=int, help='minibatch size')
+    parser.add_argument('--batch_size', default=32, type=int, help='minibatch size')
 
     # data parameters
     parser.add_argument('--dataset', default='cifar10', help='cifar10 | imagenet')
@@ -245,7 +248,10 @@ if __name__ == '__main__':
     # Load models and extract parameters
     #--------------------------------------------------------------------------
     print("Load models and extract parameters")
-    net = model_loader.load(args.dataset, args.model, args.model_file)
+    print(args.dataset, args.model, args.model_file)
+    net = model_loader.load(args.dataset, model_name=args.model, model_file=args.model_file)
+    print("DEVICE MODEL", next(net.parameters()).device)
+
     w = net_plotter.get_weights(net) # initial parameters
     s = copy.deepcopy(net.state_dict()) # deepcopy since state_dict are references
     if args.ngpu > 1:
@@ -288,6 +294,8 @@ if __name__ == '__main__':
                                 args.batch_size, args.threads, args.raw_data,
                                 args.data_split, args.split_idx,
                                 args.trainloader, args.testloader)
+
+
 
     #--------------------------------------------------------------------------
     # Start the computation

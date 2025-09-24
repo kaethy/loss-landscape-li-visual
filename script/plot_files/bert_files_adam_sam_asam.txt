@@ -1,0 +1,3 @@
+/local_storage/users/kadec/experiment_results/MRPC_BERT_no_SAM/seed=0-epoch=01-val_loss=0.3551-model=BERT-optimizer=AdamW-rho=0.040905588371971585-adaptive=False-model_name=BERT_MRPC_seed0_AdamW.pth
+/local_storage/users/kadec/experiment_results/MRPC_BERT__SAM/seed=0-epoch=02-val_loss=0.3444-model=BERT-optimizer=AdamW-rho=0.040905588371971585-adaptive=False-model_name=BERT_MRPC_seed0_AdamW.pth
+/local_storage/users/kadec/experiment_results/MRPC_BERT__SAM/seed=0-epoch=01-val_loss=0.3443-model=BERT-optimizer=AdamW-rho=0.040905588371971585-adaptive=True-model_name=BERT_MRPC_seed0_AdamW.pth

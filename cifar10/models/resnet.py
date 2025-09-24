@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
+import timm 
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -202,6 +203,13 @@ def ResNet18_torch(num_classes=10):
     model.fc = nn.Linear(in_features=512, out_features=num_classes, bias=True)
     print("Model ready")
     return model
+
+
+def VIT_10(num_classes=10):
+    return timm.create_model("vit_base_patch16_224.orig_in21k", pretrained=False, num_classes=num_classes)
+
+def VIT_100(num_classes=100):
+    return timm.create_model("vit_base_patch16_224.orig_in21k", pretrained=False, num_classes=num_classes)
 
 
 def ResNet34():

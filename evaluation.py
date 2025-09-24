@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import time
 from torch.autograd.variable import Variable
+from transformers import BatchEncoding
 
 def eval_loss(net, criterion, loader, use_cuda=False):
     """
@@ -33,12 +34,17 @@ def eval_loss(net, criterion, loader, use_cuda=False):
     with torch.no_grad():
         if isinstance(criterion, nn.CrossEntropyLoss):
             for batch_idx, (inputs, targets) in enumerate(loader):
-                batch_size = inputs.size(0)
+                batch_size = targets.size(0)
                 total += batch_size
-                inputs = Variable(inputs)
-                targets = Variable(targets)
+                #inputs = Variable(inputs)
+                #targets = Variable(targets)
                 if use_cuda:
-                    inputs, targets = inputs.cuda(), targets.cuda()
+                    if isinstance(inputs, BatchEncoding):
+                        inputs = {k: v.cuda() for k, v in inputs.items()}
+                    else:
+                        inputs = inputs.cuda()
+                    targets = targets.cuda()
+                #print(inputs.shape, targets.shape)
                 outputs = net(inputs)
                 loss = criterion(outputs, targets)
                 total_loss += loss.item()*batch_size
